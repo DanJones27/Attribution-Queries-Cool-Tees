@@ -1,0 +1,96 @@
+-- q.1
+WITH first_touch AS (
+    SELECT user_id,
+        MIN(timestamp) as first_touch_at
+    FROM page_visits
+    GROUP BY user_id),
+
+touch AS (SELECT ft.user_id,
+    ft.first_touch_at,
+    pv.utm_source,
+		pv.utm_campaign
+FROM first_touch ft
+JOIN page_visits pv
+    ON ft.user_id = pv.user_id
+    AND ft.first_touch_at = pv.timestamp)
+
+SELECT DISTINCT utm_source, utm_campaign
+FROM touch;
+-- Answer: 4 sources unique to 1 campaign each
+
+
+-- q. 2
+SELECT DISTINCT page_name FROM page_visits;
+-- Answer: 4 pages (landing, cart, checkout, purchase)
+
+
+-- q. 3 first_touch
+WITH first_touch AS (
+    SELECT user_id,
+        MIN(timestamp) as first_touch_at
+    FROM page_visits
+    GROUP BY user_id),
+
+touch AS (SELECT ft.user_id,
+    ft.first_touch_at, 
+    pv.utm_source,
+		pv.utm_campaign
+FROM first_touch AS ft
+JOIN page_visits AS pv
+    ON ft.user_id = pv.user_id
+    AND ft.first_touch_at = pv.timestamp)
+
+SELECT utm_source, utm_campaign, COUNT(*)
+FROM touch
+GROUP BY 1, 2
+ORDER BY 3 DESC;
+
+-- q.4 last_touch
+WITH last_touch AS (
+    SELECT user_id,
+        MAX(timestamp) as last_touch_at
+    FROM page_visits
+    GROUP BY user_id),
+
+touch AS (SELECT lt.user_id,
+    lt.last_touch_at, 
+    pv.utm_source,
+		pv.utm_campaign
+FROM last_touch AS lt
+JOIN page_visits AS pv
+    ON lt.user_id = pv.user_id
+    AND lt.last_touch_at = pv.timestamp)
+
+SELECT utm_source, utm_campaign, COUNT(*)
+FROM touch
+GROUP BY 1, 2
+ORDER BY 3 DESC;
+
+
+-- q.5
+SELECT DISTINCT page_name, count(*)
+FROM page_visits
+GROUP BY 1;
+
+
+-- q.6
+WITH last_touch AS (
+    SELECT user_id,
+        MAX(timestamp) as last_touch_at
+    FROM page_visits
+    GROUP BY user_id),
+
+touch AS (SELECT lt.user_id,
+    lt.last_touch_at, 
+    page_name,
+    pv.utm_source,
+		pv.utm_campaign
+FROM last_touch AS lt
+JOIN page_visits AS pv
+    ON lt.user_id = pv.user_id
+    AND lt.last_touch_at = pv.timestamp)
+
+SELECT page_name, utm_source, utm_campaign, count(*) FROM touch
+WHERE page_name = '4 - purchase'
+GROUP BY 2, 3
+ORDER BY 4 DESC;
