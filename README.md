@@ -1,9 +1,9 @@
 # Attribution-Queries-Cool-Tees
 
 
-CoolTShirts sells shirts of all kinds, as long as they are T-shaped and cool..! Recently, CTS started a few marketing campaigns to increase website visits 
+This project is on a company called 'Cool T-shirts'. CTS started a few marketing campaigns to increase website visits 
 and purchases. Using touch attribution, they’d like to map their customers’ journey: from initial visit to purchase.
-
+These are the questions below they wanted answering.
 
 1.
 How many campaigns and sources does CoolTShirts use? Which source is used for each campaign?
